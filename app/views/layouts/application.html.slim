@@ -1,0 +1,52 @@
+doctype html
+html
+  head
+    meta content=("text/html; charset=UTF-8") http-equiv="Content-Type" /
+    title =ENV["SITE_TITLE"]
+    = stylesheet_link_tag    "application", media: "all", 'data-turbolinks-track': 'reload'
+    = javascript_include_tag "application", 'data-turbolinks-track': 'reload'
+    = csrf_meta_tags
+  body
+    .navbar.navbar-default
+      .container
+        .navbar-header
+          a.navbar-brand href="../" =ENV["SITE_TITLE"]
+          button.navbar-toggle data-target="#navbar-main" data-toggle="collapse" type="button"
+            span.icon-bar
+            span.icon-bar
+            span.icon-bar
+        #navbar-main.navbar-collapse.collapse
+          /ul.nav.navbar-nav
+            /li.dropdown
+              /a#themes.dropdown-toggle data-toggle="dropdown" href="#"
+                /| DropDown
+                /span.caret
+              /ul.dropdown-menu aria-labelledby="themes"
+              /  li
+              /    a href="/" tabindex="-1"  Default
+              /  li.divider
+              /  li
+              /    a href="#/" tabindex="-1"  Item 1
+              /  li
+              /    a href="#/" tabindex="-1"  Item 2
+              /  li
+              /    a href="#/" tabindex="-1"  Item 3
+              /  li
+              /    a href="#/" tabindex="-1"  Item 4
+              /  li
+              /    a href="#/" tabindex="-1"  Item 5
+              /  li
+              /    a href="#/" tabindex="-1"  Item 6
+            /li
+              /a href=""  Help
+          ul.nav.navbar-nav.navbar-right
+            - if user_signed_in?
+              li= link_to current_user.name, ''
+              li= link_to "Logout", ENV["OIDC_SCHEME"]+"://"+ENV["OIDC_HOST"]+":"+ENV["OIDC_PORT"]+"/session", method: :delete, :onclick => "var xhr = new XMLHttpRequest();xhr.open('GET', '/users/sign_out' , true);xhr.send()"
+            - else
+              /li= link_to "Sign in", new_user_session_path
+              li= link_to "Sign in", '/users/auth/openid_connect'
+    .container
+      #banner
+        .row
+          = yield
